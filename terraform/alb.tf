@@ -1,7 +1,7 @@
 resource "aws_alb" "autoship_alb" {
-  name = "autoshiip_alb"
+  name = "autoshiipAlb"
   load_balancer_type = "application"
-  subnets = [aws_subnet.public_subnet1, aws_subnet.public_subnet2]
+  subnets = [aws_subnet.public_subnet1.id, aws_subnet.public_subnet2.id]
   security_groups = [aws_security_group.alb_sg.id]
 }
 
@@ -27,7 +27,7 @@ resource "aws_security_group" "alb_sg" {
 }
 
 resource "aws_alb_target_group" "autoship_tg" {
-  name = "autoship_alb_target"
+  name = "autoshipAlbTarget"
   port = 80
   protocol = "HTTP"
   vpc_id = aws_vpc.autoship.id

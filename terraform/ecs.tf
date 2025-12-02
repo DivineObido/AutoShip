@@ -24,9 +24,9 @@ resource "aws_iam_role_policy_attachment" "ecs_taskexecution_role_policy" {
 
 resource "aws_ecs_task_definition" "task" {
   family = "autoship_task"
-  network_mode = "aws_vpc"
+  network_mode = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu = "8"
+  cpu = "256"
   memory = "512"
 
   execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
@@ -51,7 +51,7 @@ resource "aws_security_group" "ecs_sg" {
     to_port = 80
     from_port = 80
     protocol = "tcp"
-    security_groups = [aws_security_group.alb_sg]
+    security_groups = [aws_security_group.alb_sg.id]
     description = "Allow inboud traffic from alb"
   }
   
@@ -72,8 +72,8 @@ resource "aws_ecs_service" "service" {
   launch_type = "FARGATE"
 
   network_configuration {
-    subnets = [aws_subnet.public_subnet1, aws_subnet.public_subnet2]
-    security_groups = [aws_security_group.ecs_sg]
+    subnets = [aws_subnet.public_subnet1.id, aws_subnet.public_subnet2.id]
+    security_groups = [aws_security_group.ecs_sg.id]
     assign_public_ip = true
   }
 
