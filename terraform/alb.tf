@@ -25,3 +25,22 @@ resource "aws_security_group" "alb_sg" {
     description = "Allow outbound traffic"
   }
 }
+
+resource "aws_alb_target_group" "autoship_tg" {
+  name = "autoship_alb_target"
+  port = 80
+  protocol = "HTTP"
+  vpc_id = aws_vpc.autoship.id
+  target_type = "ip"
+}
+
+resource "aws_alb_listener" "alb_listener" {
+load_balancer_arn = aws_alb.autoship_alb.arn
+  port = 80
+  protocol = "HTTP"
+
+  default_action {
+    type = "forward"
+    target_group_arn = aws_alb_target_group.autoship_tg.arn
+  }
+}
