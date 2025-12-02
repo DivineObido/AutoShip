@@ -1,3 +1,6 @@
+const API_URL = "https://www.goldgym.work.gd"
+
+
 const hambugerMenu = document.querySelector(".harmbuger-menu")
 const navItems = document.querySelector(".nav-items")
 
