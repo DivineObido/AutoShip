@@ -1,0 +1,81 @@
+name: Deploy to Amazon ECS (fARGATE)
+
+# Triggers workflow
+on:
+  push:
+    branches: [ "main" ]
+  pull_request: 
+    branches: [ "main" ]
+     
+
+# This allows workflow to read repo content
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest # This is github runner operating system
+    environment: development
+
+    steps:
+    # This checkout the code for any error
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # Load environment variables
+    - name: environment variables
+      run: |
+        export $(grep -v '^#' .env | xargs)
+
+    # configuring aws credentials 
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    # Login to ECR so docker can push images
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    # Build, tag and push image to ECR
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        # Build a docker container and push it to ECR so that it can be deployed to ECS.
+        echo "Building Docker image..."
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        echo "Pushing Docker images to ECR"
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    # Update EC2 task definition with new image
+    - name: Add the new image ID in  ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ecs-task-def.json
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
+      
+    # Deploy the updated task definition
+    - name: Deploy task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
+
+    # Notify team on slack
+    - name: Notify slack
+      uses: slackapi/slack-github-actions@v1.23.0
+      with:
+        payload: '{"text": "Application successfully deployed"}'
+        webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
