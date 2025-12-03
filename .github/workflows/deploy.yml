@@ -75,7 +75,7 @@ jobs:
 
     # Notify team on slack
     - name: Notify slack
-      uses: slackapi/slack-github-actions@v1.23.0
+      uses: slackapi/slack-github-action@v1.23.0
       with:
         payload: '{"text": "Application successfully deployed"}'
         webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
