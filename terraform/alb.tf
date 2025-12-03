@@ -40,6 +40,10 @@ resource "aws_alb_target_group" "autoship_tg" {
   protocol = "HTTP"
   vpc_id = aws_vpc.autoship.id
   target_type = "ip"
+
+  health_check {
+    path = "/"
+  }
 }
 
 resource "aws_alb_listener" "https_listener" {

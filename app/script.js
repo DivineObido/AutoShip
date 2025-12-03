@@ -1,4 +1,4 @@
-const API_URL = "https://www.goldgym.work.gd"
+const API_URL = "https://goldgym.work.gd"
 
 
 const hambugerMenu = document.querySelector(".harmbuger-menu")

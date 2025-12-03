@@ -83,5 +83,5 @@ resource "aws_ecs_service" "service" {
     container_port = 80
   }
 
-  depends_on = [ aws_alb_listener.https_listener ]
+  # depends_on = [ aws_alb_listener.http_listener ]
 }
