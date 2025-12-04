@@ -80,9 +80,9 @@ jobs:
     #     container-name: ${{ env.CONTAINER_NAME }}
     #     image: ${{ steps.build-image.outputs.image }}
       
-    # Deploy the updated task definition
+    # Deploy existing ECS service (ECS manages task definition)
     - name: Deploy to Amazon ECS service
-      uses: aws-actions/amazon-ecs-deploy-service@v1
+      uses: aws-actions/amazon-ecs-deploy-service@v2
       with:
         service: ${{ env.ECS_SERVICE }}
         cluster: ${{ env.ECS_CLUSTER }}
