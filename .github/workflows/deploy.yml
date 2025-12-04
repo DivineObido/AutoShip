@@ -58,6 +58,11 @@ jobs:
         : "${ECR_REPOSITORY:?ECR_REPOSITORY is not set}"
         : "${IMAGE_TAG:?IMAGE_TAG is not set}"
 
+        # Trim any whitespace
+        ECR_REGISTRY=$(echo "$ECR_REGISTRY" | xargs)
+        ECR_REPOSITORY=$(echo "$ECR_REPOSITORY" | xargs)
+        IMAGE_TAG=$(echo "$IMAGE_TAG" | xargs)
+
         # Build a docker container and push it to ECR so that it can be deployed to ECS.
         echo "Building Docker image..."
         docker build -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" .
