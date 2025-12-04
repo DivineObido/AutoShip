@@ -16,7 +16,8 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest # This is github runner operating system
-    environment: development
+    environment: 
+      name: development
 
     steps:
     # This checkout the code for any error
