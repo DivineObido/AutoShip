@@ -24,6 +24,7 @@ jobs:
       CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
       ECS_SERVICE: ${{ vars.ECS_SERVICE }}
       ECS_CLUSTER: ${{ vars.ECS_CLUSTER }}
+      ECS_TASK_DEFINITION: ${{ vars.ECS_TASK_DEFINITION }}
       
     steps:
     # This checkout the code for any error
@@ -75,7 +76,7 @@ jobs:
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: ecs-task-def.json
+        task-definition: ${{ env.ECS_TASK_DEFINITION }}
         container-name: ${{ env.CONTAINER_NAME }}
         image: ${{ steps.build-image.outputs.image }}
       
