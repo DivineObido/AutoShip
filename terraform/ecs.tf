@@ -22,27 +22,6 @@ resource "aws_iam_role_policy_attachment" "ecs_taskexecution_role_policy" {
     policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-# resource "aws_ecs_task_definition" "task" {
-#   family = "autoship_task"
-#   network_mode = "awsvpc"
-#   requires_compatibilities = ["FARGATE"]
-#   cpu = "256"
-#   memory = "512"
-
-#   execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
-#   container_definitions = jsonencode([
-#     {
-#         name = "autoship"
-#         image = "${aws_ecr_repository.image_registry.repository_url}:latest"
-#         essential = true
-#         portMappings = [{
-#             containerPort = 80
-#             hostPort = 80
-#         }]
-#     }
-#   ])
-# }
-
 resource "aws_security_group" "ecs_sg" {
     name = "ecs_sg"
     vpc_id = aws_vpc.autoship.id
@@ -86,6 +65,4 @@ resource "aws_ecs_service" "service" {
     container_name = "autoship"
     container_port = 80
   }
-
-  # depends_on = [ aws_alb_listener.http_listener ]
 }
