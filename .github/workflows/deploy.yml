@@ -94,6 +94,5 @@ jobs:
       with:
         channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
         payload: '{"text": "Application successfully deployed"}'
-        # env:
-        #   SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        # webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      env:
+        webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
