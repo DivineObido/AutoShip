@@ -18,28 +18,28 @@ Deployment notifications are sent to **Slack**.
 ## Infrastructure Stack (Terraform)
 
 This project provisions the following resources using **Terraform**:
-### ** Networking**
+### Networking
 - VPC  
 - Public & private subnets  
 - Internet Gateway  
 - NAT Gateway  
 - Route tables  
 
-### ** Compute**
+### Compute
 - ECS Cluster (Fargate)  
 - ECS Task Definition  
 - ECS Service with autoscaling  
 - Application Load Balancer  
 
-### ** Storage**
+### Storage
 - Amazon ECR repository
 
-### **Security**
+### Security
 - Security Groups  
 - IAM roles  
 - ECS Task Execution Role  
 
-### ** SSL Certificate (ACM)**  
+### SSL Certificate (ACM)
 - Domain from **freedomin.one**  
 - SSL certificate validated using **DNS validation**  
 - ALB listener on port **443**, forwarding to Fargate tasks  
