@@ -14,6 +14,8 @@ Deployment notifications are sent to **Slack**.
 - Ensure seamless deployments without downtime
 
 ## Architecture Diagram
+<img width="812" height="650" alt="Screenshot 2025-12-06 083614" src="https://github.com/user-attachments/assets/e6d75716-7d67-4829-bfa7-fb52b6066b30" />
+
 
 ## Infrastructure Stack (Terraform)
 
